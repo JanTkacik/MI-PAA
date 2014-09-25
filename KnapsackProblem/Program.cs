@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using KnapsackProblem.Algorithms;
 using KnapsackProblem.Configuration;
 using KnapsackProblem.Helpers;
@@ -19,11 +20,11 @@ namespace KnapsackProblem
                 VerboseLog("Data parsing ...");
 
                 DataParser parser = new DataParser();
-                IEnumerable<KnapsackProblemModel> knapsackProblemModels = parser.ParseProblem(options.InputFiles);
+                List<KnapsackProblemModel> knapsackProblemModels = parser.ParseProblem(options.InputFiles);
                 Dictionary<int, int> knownResults = null;
                 Dictionary<int, Tuple<int, long>> bruteForceResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> costToRatioHeuristicsResults = new Dictionary<int, Tuple<int, long>>();
-                
+
                 if (options.ResultFiles != null)
                 {
                     knownResults = parser.ParseResults(options.ResultFiles);
@@ -80,6 +81,72 @@ namespace KnapsackProblem
 
                     VerboseLog("Problem solved.");
                 }
+
+                TextWriter reportWriter;
+
+                if (options.OutputFilePath == null)
+                {
+                    reportWriter = Console.Out;
+                }
+                else
+                {
+                    reportWriter = new StreamWriter(options.OutputFilePath);
+                }
+
+                reportWriter.WriteLine("Knapsack problem report");
+                reportWriter.WriteLine("Ticks frequency: " + Stopwatch.Frequency);
+
+                reportWriter.Write("Problem ID");
+                if (knownResults != null)
+                {
+                    reportWriter.Write(";Known result");
+                }
+                if (options.BruteForce)
+                {
+                    reportWriter.Write(";Brute force result;Time [Ticks]");
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";Relative error [%]");
+                    }
+                }
+                if (options.CostToRatioHeuristics)
+                {
+                    reportWriter.Write(";Cost to weight ration heuristics result;Time [Ticks]");
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";Relative error [%]");
+                    }
+                }
+                reportWriter.WriteLine();
+
+                foreach (KnapsackProblemModel problem in knapsackProblemModels)
+                {
+                    var problemId = problem.ProblemId;
+                    reportWriter.Write(problemId);
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";" + knownResults[problemId]);
+                    }
+                    if (options.BruteForce)
+                    {
+                        Tuple<int, long> bruteForceResult = bruteForceResults[problemId];
+                        reportWriter.Write(";" + bruteForceResult.Item1 + ";" + bruteForceResult.Item1);
+                        if (knownResults != null)
+                        {
+                            reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], bruteForceResult.Item1));
+                        }
+                    }
+                    if (options.CostToRatioHeuristics)
+                    {
+                        Tuple<int, long> heuristicsResult = costToRatioHeuristicsResults[problemId];
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item1);
+                        if (knownResults != null)
+                        {
+                            reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
+                        }
+                    }
+                    reportWriter.WriteLine();
+                }
             }
             else
             {
@@ -87,6 +154,12 @@ namespace KnapsackProblem
             }
 
             Environment.Exit(0);
+        }
+
+        private static decimal CalculateRelativeError(int knownResult, int realResult)
+        {
+            int diff = Math.Abs(knownResult - realResult);
+            return (diff*100)/((decimal)knownResult);
         }
 
         private static void VerboseLog(object data)

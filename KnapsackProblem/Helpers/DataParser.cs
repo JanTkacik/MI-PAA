@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using KnapsackProblem.Model;
 
@@ -7,7 +6,7 @@ namespace KnapsackProblem.Helpers
 {
     class DataParser
     {
-        public IEnumerable<KnapsackProblemModel> ParseProblem(string[] inputFilePaths)
+        public List<KnapsackProblemModel> ParseProblem(string[] inputFilePaths)
         {
             List<KnapsackProblemModel> models = new List<KnapsackProblemModel>();
 
@@ -19,7 +18,7 @@ namespace KnapsackProblem.Helpers
             return models;
         }
 
-        public IEnumerable<KnapsackProblemModel> ParseProblem(string filePath)
+        public List<KnapsackProblemModel> ParseProblem(string filePath)
         {
             using (StreamReader reader = new StreamReader(filePath))
             {
@@ -27,7 +26,7 @@ namespace KnapsackProblem.Helpers
             }
         }
 
-        public IEnumerable<KnapsackProblemModel> ParseProblem(TextReader reader)
+        public List<KnapsackProblemModel> ParseProblem(TextReader reader)
         {
             List<KnapsackProblemModel> models = new List<KnapsackProblemModel>();
 
