@@ -16,7 +16,13 @@ namespace KnapsackProblem.Configuration
 
         [Option('o', "output", HelpText = "Path to output files - if not specified, results will be printed to console", DefaultValue = null, Required = false)]
         public string OutputFilePath { get; set; }
-        
+
+        [Option('a', "bruteforce", HelpText = "Runs brute force algorithm", DefaultValue = false, Required = false)]
+        public bool BruteForce { get; set; }
+
+        [Option('b', "ratioheuristic", HelpText = "Runs cost to weight ratio heuristics", DefaultValue = false, Required = false)]
+        public bool CostToRatioHeuristics { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {
@@ -26,7 +32,7 @@ namespace KnapsackProblem.Configuration
                 Copyright = new CopyrightInfo("<<Jan Tkacik>>", 2014),
                 AddDashesToOption = true
             };
-            help.AddPreOptionsLine("Usage: -p problem.dat problem2.dat -r result.dat result2.dat");
+            help.AddPreOptionsLine("Usage: -p problem.dat problem2.dat -r result.dat result2.dat -a -b");
             help.AddOptions(this);
             return help;
         }

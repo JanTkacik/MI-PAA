@@ -7,12 +7,14 @@ namespace KnapsackProblem.Model
         public int Weight { get; private set; }
         public int Cost { get; private set; }
         public int ItemId { get; private set; }
+        public decimal CostToWeightRatio { get; private set; }
 
         public Item(int weight, int cost, int itemId) 
         {
             ItemId = itemId;
             Weight = weight;
             Cost = cost;
+            CostToWeightRatio = ((decimal) Cost)/Weight;
         }
 
         public bool Equals(Item other)
@@ -40,6 +42,11 @@ namespace KnapsackProblem.Model
         public override string ToString()
         {
             return string.Format("ItemId: {2}, Weight: {0}, Cost: {1}", Weight, Cost, ItemId);
+        }
+
+        public static int CostToWeightRatioComparerDescending(Item x, Item y)
+        {
+            return decimal.Compare(y.CostToWeightRatio, x.CostToWeightRatio);
         }
     }
 }

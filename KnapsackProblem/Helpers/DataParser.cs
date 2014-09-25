@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using KnapsackProblem.Model;
 
@@ -54,6 +55,52 @@ namespace KnapsackProblem.Helpers
             return new KnapsackProblemModel(id, capacity, items);
         }
 
-        
+
+        public Dictionary<int, int> ParseResults(string[] inputFilePaths)
+        {
+            Dictionary<int, int> results = new Dictionary<int, int>();
+
+            foreach (string inputFilePath in inputFilePaths)
+            {
+                Dictionary<int, int> tempResults = ParseResults(inputFilePath);
+                foreach (KeyValuePair<int, int> result in tempResults)
+                {
+                    results.Add(result.Key, result.Value);
+                }
+            }
+
+            return results;
+        }
+
+        public Dictionary<int, int> ParseResults(string filePath)
+        {
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                return ParseResults(reader);
+            }
+        }
+
+        public Dictionary<int, int> ParseResults(TextReader reader)
+        {
+            Dictionary<int,int> results = new Dictionary<int, int>();
+
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                KeyValuePair<int, int> result = ParseResultLine(line);
+                results.Add(result.Key, result.Value);
+            }
+
+            return results;
+        }
+
+        private KeyValuePair<int, int> ParseResultLine(string line)
+        {
+            string[] data = line.Split(' ');
+            int id = int.Parse(data[0]);
+            int result = int.Parse(data[2]);
+            
+            return new KeyValuePair<int, int>(id, result);
+        }
     }
 }

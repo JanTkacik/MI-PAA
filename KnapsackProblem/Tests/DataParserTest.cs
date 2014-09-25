@@ -29,5 +29,17 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(refereceModel, parsedModel);
         }
+
+        [Test]
+        public void ParseResult_ShouldReturnCorrectResult_IfCorrectDataArePassed()
+        {
+            const string data = "9000 4 473  1 1 0 1";
+            StringReader stringReader = new StringReader(data);
+
+            DataParser parser = new DataParser();
+            Dictionary<int, int> dictionary = parser.ParseResults(stringReader);
+            
+            Assert.AreEqual(473, dictionary[9000]);
+        }
     }
 }

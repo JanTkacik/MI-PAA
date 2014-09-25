@@ -6,7 +6,7 @@ namespace KnapsackProblem.Model
 {
     public class KnapsackProblemModel : IEquatable<KnapsackProblemModel>
     {
-        private readonly int _problemId;
+        public int ProblemId { get; private set; }
         public int BagCapacity { get; private set; }
         public HashSet<Item> Items { get; private set; }
 
@@ -14,14 +14,14 @@ namespace KnapsackProblem.Model
         {
             BagCapacity = bagCapacity;
             Items = new HashSet<Item>(items);
-            _problemId = problemId;
+            ProblemId = problemId;
         }
 
         public bool Equals(KnapsackProblemModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return _problemId == other._problemId && BagCapacity == other.BagCapacity && Items.SetEquals(other.Items);
+            return ProblemId == other.ProblemId && BagCapacity == other.BagCapacity && Items.SetEquals(other.Items);
         }
 
         public override bool Equals(object obj)
@@ -36,7 +36,7 @@ namespace KnapsackProblem.Model
         {
             unchecked
             {
-                int hashCode = _problemId;
+                int hashCode = ProblemId;
                 hashCode = (hashCode*397) ^ BagCapacity;
                 hashCode = (hashCode*397) ^ (Items != null ? Items.GetHashCode() : 0);
                 return hashCode;
@@ -50,7 +50,7 @@ namespace KnapsackProblem.Model
             {
                 items.AppendLine(item.ToString());
             }
-            return string.Format("ProblemId: {0}, BagCapacity: {1}, Items: {2}", _problemId, BagCapacity, items);
+            return string.Format("ProblemId: {0}, BagCapacity: {1}, Items: {2}", ProblemId, BagCapacity, items);
         }
     }
 }
