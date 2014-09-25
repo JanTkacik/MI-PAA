@@ -7,13 +7,13 @@ namespace KnapsackProblem.Model
     public class KnapsackProblemModel : IEquatable<KnapsackProblemModel>
     {
         private readonly int _problemId;
-        private readonly int _bagCapacity;
-        private readonly HashSet<Item> _items;
+        public int BagCapacity { get; private set; }
+        public HashSet<Item> Items { get; private set; }
 
         public KnapsackProblemModel(int problemId, int bagCapacity, IEnumerable<Item> items)
         {
-            _bagCapacity = bagCapacity;
-            _items = new HashSet<Item>(items);
+            BagCapacity = bagCapacity;
+            Items = new HashSet<Item>(items);
             _problemId = problemId;
         }
 
@@ -21,7 +21,7 @@ namespace KnapsackProblem.Model
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return _problemId == other._problemId && _bagCapacity == other._bagCapacity && _items.SetEquals(other._items);
+            return _problemId == other._problemId && BagCapacity == other.BagCapacity && Items.SetEquals(other.Items);
         }
 
         public override bool Equals(object obj)
@@ -37,8 +37,8 @@ namespace KnapsackProblem.Model
             unchecked
             {
                 int hashCode = _problemId;
-                hashCode = (hashCode*397) ^ _bagCapacity;
-                hashCode = (hashCode*397) ^ (_items != null ? _items.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ BagCapacity;
+                hashCode = (hashCode*397) ^ (Items != null ? Items.GetHashCode() : 0);
                 return hashCode;
             }
         }
@@ -46,11 +46,11 @@ namespace KnapsackProblem.Model
         public override string ToString()
         {
             StringBuilder items = new StringBuilder();
-            foreach (Item item in _items)
+            foreach (Item item in Items)
             {
                 items.AppendLine(item.ToString());
             }
-            return string.Format("ProblemId: {0}, BagCapacity: {1}, Items: {2}", _problemId, _bagCapacity, items);
+            return string.Format("ProblemId: {0}, BagCapacity: {1}, Items: {2}", _problemId, BagCapacity, items);
         }
     }
 }

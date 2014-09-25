@@ -2,13 +2,13 @@
 
 namespace KnapsackProblem.Model
 {
-    public struct Item : IEquatable<Item>
+    public class Item : IEquatable<Item>
     {
         public int Weight { get; private set; }
         public int Cost { get; private set; }
         public int ItemId { get; private set; }
 
-        public Item(int weight, int cost, int itemId) : this()
+        public Item(int weight, int cost, int itemId) 
         {
             ItemId = itemId;
             Weight = weight;

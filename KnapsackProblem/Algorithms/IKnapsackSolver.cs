@@ -4,6 +4,6 @@ namespace KnapsackProblem.Algorithms
 {
     interface IKnapsackSolver
     {
-        KnapsackResultModel Solve(KnapsackProblemModel problem);
+        int Solve(KnapsackProblemModel problem);
     }
 }

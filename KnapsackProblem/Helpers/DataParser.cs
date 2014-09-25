@@ -6,6 +6,18 @@ namespace KnapsackProblem.Helpers
 {
     class DataParser
     {
+        public IEnumerable<KnapsackProblemModel> ParseProblem(string[] inputFilePaths)
+        {
+            List<KnapsackProblemModel> models = new List<KnapsackProblemModel>();
+
+            foreach (string inputFilePath in inputFilePaths)
+            {
+                models.AddRange(ParseProblem(inputFilePath));
+            }
+
+            return models;
+        }
+
         public IEnumerable<KnapsackProblemModel> ParseProblem(string filePath)
         {
             using (StreamReader reader = new StreamReader(filePath))
@@ -41,5 +53,7 @@ namespace KnapsackProblem.Helpers
 
             return new KnapsackProblemModel(id, capacity, items);
         }
+
+        
     }
 }
