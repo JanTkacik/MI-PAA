@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using KnapsackProblem.Model;
 
 namespace KnapsackProblem.Algorithms
 {
     class BruteForceSolver : IKnapsackSolver
     {
+        public KnapsackResultModel Solve(KnapsackProblemModel problem)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
