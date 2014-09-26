@@ -5,10 +5,8 @@ $DataPath = "C:\Users\jan.tkacik\Documents\GitHub\MI-PAA\Data\KnapsackProblem\"
 									$DataPath"knap_10.inst.dat" `
 									$DataPath"knap_15.inst.dat" `
 									$DataPath"knap_20.inst.dat" `
-									$DataPath"knap_22.inst.dat" `
 								-r 	$DataPath"knap_4.sol.dat"  `
 									$DataPath"knap_10.sol.dat"  `
 									$DataPath"knap_15.sol.dat"  `
 									$DataPath"knap_20.sol.dat"  `
-									$DataPath"knap_22.sol.dat"  `
 								-a -b -v

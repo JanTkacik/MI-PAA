@@ -101,29 +101,28 @@ namespace KnapsackProblem
                 {
                     reportWriter = new StreamWriter(options.OutputFilePath);
                 }
+                
+                decimal frequency = Stopwatch.Frequency;
 
-                reportWriter.WriteLine("Knapsack problem report");
-                reportWriter.WriteLine("Ticks frequency: " + Stopwatch.Frequency);
-
-                reportWriter.Write("Problem ID");
+                reportWriter.Write("Problem ID;Items count");
                 if (knownResults != null)
                 {
                     reportWriter.Write(";Known result");
                 }
                 if (options.BruteForce)
                 {
-                    reportWriter.Write(";Brute force result;Time [Ticks]");
+                    reportWriter.Write(";Brute force result;Time [s]");
                     if (knownResults != null)
                     {
-                        reportWriter.Write(";Relative error [%]");
+                        reportWriter.Write(";Relative error");
                     }
                 }
                 if (options.CostToRatioHeuristics)
                 {
-                    reportWriter.Write(";Cost to weight ration heuristics result;Time [Ticks]");
+                    reportWriter.Write(";Cost to weight ration heuristics result;Time [s]");
                     if (knownResults != null)
                     {
-                        reportWriter.Write(";Relative error [%]");
+                        reportWriter.Write(";Relative error");
                     }
                 }
                 reportWriter.WriteLine();
@@ -132,6 +131,7 @@ namespace KnapsackProblem
                 {
                     var problemId = problem.ProblemId;
                     reportWriter.Write(problemId);
+                    reportWriter.Write(";" + problem.Items.Count);
                     if (knownResults != null)
                     {
                         reportWriter.Write(";" + knownResults[problemId]);
@@ -139,7 +139,7 @@ namespace KnapsackProblem
                     if (options.BruteForce)
                     {
                         Tuple<int, long> bruteForceResult = bruteForceResults[problemId];
-                        reportWriter.Write(";" + bruteForceResult.Item1 + ";" + bruteForceResult.Item2);
+                        reportWriter.Write(";" + bruteForceResult.Item1 + ";" + bruteForceResult.Item2 / frequency);
                         if (knownResults != null)
                         {
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], bruteForceResult.Item1));
@@ -148,7 +148,7 @@ namespace KnapsackProblem
                     if (options.CostToRatioHeuristics)
                     {
                         Tuple<int, long> heuristicsResult = costToRatioHeuristicsResults[problemId];
-                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2);
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2 / frequency);
                         if (knownResults != null)
                         {
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
@@ -168,7 +168,7 @@ namespace KnapsackProblem
         private static decimal CalculateRelativeError(int knownResult, int realResult)
         {
             int diff = Math.Abs(knownResult - realResult);
-            return (diff*100)/((decimal)knownResult);
+            return (diff)/((decimal)knownResult);
         }
 
         private static void VerboseLog(object data)
