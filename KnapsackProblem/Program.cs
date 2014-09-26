@@ -35,10 +35,19 @@ namespace KnapsackProblem
                 IKnapsackSolver bruteForceSolver = new BruteForceSolver();
                 IKnapsackSolver ratioHeuristicSolver = new RatioHeuristicSolver();
 
+                VerboseLog("Solving JIT instance");
+                KnapsackProblemModel JITProblem = new KnapsackProblemModel(9000, 100, new List<Item>
+                {
+                    new Item(18, 114, 0), new Item(42, 136, 1), new Item(88, 192, 2), new Item(3, 223, 3)
+                });
+
+                bruteForceSolver.Solve(JITProblem);
+                ratioHeuristicSolver.Solve(JITProblem);
+
                 VerboseLog("Calculation started");
 
                 Stopwatch stopwatch = new Stopwatch();
-
+                
                 foreach (KnapsackProblemModel problem in knapsackProblemModels)
                 {
                     VerboseLog("Solving problem:");
@@ -130,7 +139,7 @@ namespace KnapsackProblem
                     if (options.BruteForce)
                     {
                         Tuple<int, long> bruteForceResult = bruteForceResults[problemId];
-                        reportWriter.Write(";" + bruteForceResult.Item1 + ";" + bruteForceResult.Item1);
+                        reportWriter.Write(";" + bruteForceResult.Item1 + ";" + bruteForceResult.Item2);
                         if (knownResults != null)
                         {
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], bruteForceResult.Item1));
@@ -139,7 +148,7 @@ namespace KnapsackProblem
                     if (options.CostToRatioHeuristics)
                     {
                         Tuple<int, long> heuristicsResult = costToRatioHeuristicsResults[problemId];
-                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item1);
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2);
                         if (knownResults != null)
                         {
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));

@@ -50,7 +50,7 @@ namespace KnapsackProblem.Model
             {
                 items.AppendLine(item.ToString());
             }
-            return string.Format("ProblemId: {0}, BagCapacity: {1}, Items: {2}", ProblemId, BagCapacity, items);
+            return string.Format("ProblemId: {0}, BagCapacity: {1}, Items: \n{2}", ProblemId, BagCapacity, items);
         }
     }
 }

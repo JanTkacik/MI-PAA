@@ -17,13 +17,17 @@ namespace KnapsackProblem.Algorithms
             while (bag.AcceptableWeight())
             {
                 lastAdded++;
-                if (lastAdded > items.Count)
+                if (lastAdded >= items.Count)
                 {
                     break;
                 }
                 bag.InsertItem(items[lastAdded]);
             }
-            bag.RemoveItem(items[lastAdded]);
+            
+            if (!bag.AcceptableWeight())
+            {
+                bag.RemoveItem(items[lastAdded]);
+            }
 
             return bag.ItemsCost();
         }

@@ -58,7 +58,7 @@
     <Compile Include="Model\KnapsackProblemModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\BruteForceSolverTest.cs" />
+    <Compile Include="Tests\SolversTests.cs" />
     <Compile Include="Tests\DataParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
