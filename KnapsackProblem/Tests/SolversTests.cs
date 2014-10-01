@@ -22,7 +22,20 @@ namespace KnapsackProblem.Tests
             Assert.AreEqual(473, solve);
         }
 
-        
+        [Test]
+        public void SimpleTest2()
+        {
+            KnapsackProblemModel problem = new KnapsackProblemModel(9000, 100, new List<Item>
+                {
+                    new Item(89, 196, 0), new Item(18, 62, 1), new Item(57, 34, 2), new Item(69, 112, 3)
+                });
+
+            IKnapsackSolver solver = new RatioHeuristicSolver();
+            int solve = solver.Solve(problem);
+
+            //Assert.AreEqual(473, solve);
+        }
+
 
         [Test]
         public void Solve_ShouldReturnCorrectValue_IfAllItemsShouldBeInBag()

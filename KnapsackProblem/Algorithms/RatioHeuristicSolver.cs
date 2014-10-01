@@ -13,20 +13,13 @@ namespace KnapsackProblem.Algorithms
 
             Bag bag = new Bag(problem.BagCapacity);
 
-            int lastAdded = -1;
-            while (bag.AcceptableWeight())
+            foreach (Item t in items)
             {
-                lastAdded++;
-                if (lastAdded >= items.Count)
+                bag.InsertItem(t);
+                if (!bag.AcceptableWeight())
                 {
-                    break;
+                    bag.RemoveItem(t);
                 }
-                bag.InsertItem(items[lastAdded]);
-            }
-            
-            if (!bag.AcceptableWeight())
-            {
-                bag.RemoveItem(items[lastAdded]);
             }
 
             return bag.ItemsCost();
