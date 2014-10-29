@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\BranchAndBoundSolver.cs" />
     <Compile Include="Algorithms\BruteForceSolver.cs" />
     <Compile Include="Algorithms\IKnapsackSolver.cs" />
     <Compile Include="Algorithms\RatioHeuristicSolver.cs" />
