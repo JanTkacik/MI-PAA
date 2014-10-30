@@ -26,6 +26,9 @@ namespace KnapsackProblem.Configuration
         [Option('c', "branchandbound", HelpText = "Runs branch and bound optimized brute force algorithm", DefaultValue = false, Required = false)]
         public bool BranchAndBound { get; set; }
 
+        [Option('d', "dynamicbycost", HelpText = "Runs dynamic programming technique with cost decomposition", DefaultValue = false, Required = false)]
+        public bool DynamicByCost { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {

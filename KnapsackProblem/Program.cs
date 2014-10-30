@@ -25,6 +25,7 @@ namespace KnapsackProblem
                 Dictionary<int, Tuple<int, long>> bruteForceResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> costToRatioHeuristicsResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> branchAndBoundResults = new Dictionary<int, Tuple<int, long>>();
+                Dictionary<int, Tuple<int, long>> dynamicByCostResults = new Dictionary<int, Tuple<int, long>>();
 
                 if (options.ResultFiles != null)
                 {
@@ -36,6 +37,7 @@ namespace KnapsackProblem
                 IKnapsackSolver bruteForceSolver = new BruteForceSolver();
                 IKnapsackSolver ratioHeuristicSolver = new RatioHeuristicSolver();
                 IKnapsackSolver branchAndBoundSolver = new BranchAndBoundSolver();
+                IKnapsackSolver dynamicByCost = new DynamicByCost();
 
                 VerboseLog("Solving JIT instance");
                 KnapsackProblemModel JITProblem = new KnapsackProblemModel(9000, 100, new List<Item>
@@ -46,6 +48,7 @@ namespace KnapsackProblem
                 bruteForceSolver.Solve(JITProblem);
                 ratioHeuristicSolver.Solve(JITProblem);
                 branchAndBoundSolver.Solve(JITProblem);
+                dynamicByCost.Solve(JITProblem);
 
                 VerboseLog("Calculation started");
 
@@ -93,6 +96,23 @@ namespace KnapsackProblem
                         if (knownResult != -1 && result != knownResult)
                         {
                             Console.WriteLine("ERROR - Branch and bound algorithm not accurate for problem " + problem);
+                            Environment.Exit(1);
+                        }
+                    }
+
+                    if (options.DynamicByCost)
+                    {
+                        VerboseLog("Dynamic by cost solver ...");
+
+                        stopwatch.Restart();
+                        int result = dynamicByCost.Solve(problem);
+                        stopwatch.Stop();
+
+                        dynamicByCostResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
+
+                        if (knownResult != -1 && result != knownResult)
+                        {
+                            Console.WriteLine("ERROR - Dynamic by cost algorithm not accurate for problem " + problem);
                             Environment.Exit(1);
                         }
                     }
