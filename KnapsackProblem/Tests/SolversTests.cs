@@ -33,6 +33,64 @@ namespace KnapsackProblem.Tests
         }
 
         [Test]
+        public void SimpleTestWithZeroElem()
+        {
+            KnapsackProblemModel problem = new KnapsackProblemModel(9000, 100, new List<Item>
+                {
+                    new Item(18, 0, 0), new Item(42, 136, 1), new Item(88, 0, 2), new Item(3, 223, 3)
+                });
+
+            IKnapsackSolver solver = new BruteForceSolver();
+            int solve = solver.Solve(problem);
+
+            Assert.AreEqual(359, solve);
+
+            IKnapsackSolver solver2 = new BranchAndBoundSolver();
+            int solve2 = solver2.Solve(problem);
+
+            Assert.AreEqual(359, solve2);
+
+            IKnapsackSolver solver3 = new DynamicByCost();
+            int solve3 = solver3.Solve(problem);
+
+            Assert.AreEqual(359, solve3);
+        }
+
+        [Test]
+        public void SimpleTest5()
+        {
+            KnapsackProblemModel problem = new KnapsackProblemModel(9000, 100, new List<Item>
+                {
+                    new Item(27, 38, 0), 
+                    new Item(2, 86, 1), 
+                    new Item(41, 112, 2), 
+                    new Item(1, 0, 3),
+                    new Item(25, 66, 4),
+                    new Item(1, 97, 5),
+                    new Item(34, 195, 6),
+                    new Item(3, 85, 7),
+                    new Item(50, 42, 8),
+                    new Item(12, 223, 9)
+                });
+
+            IKnapsackSolver solver = new BruteForceSolver();
+            int solve = solver.Solve(problem);
+
+            Assert.AreEqual(798, solve);
+
+            IKnapsackSolver solver2 = new BranchAndBoundSolver();
+            int solve2 = solver2.Solve(problem);
+
+            Assert.AreEqual(798, solve2);
+
+            IKnapsackSolver solver3 = new DynamicByCost();
+            int solve3 = solver3.Solve(problem);
+
+            Assert.AreEqual(798, solve3);
+        }
+
+
+        [Test]
         public void SimpleTest3()
         {
             KnapsackProblemModel problem = new KnapsackProblemModel(9013, 100, new List<Item>

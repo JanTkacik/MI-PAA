@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using KnapsackProblem.Model;
 
+using DecompositionTable = System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, int>>;
+
 namespace KnapsackProblem.Algorithms
 {
     class DynamicByCost : IKnapsackSolver
@@ -12,61 +14,58 @@ namespace KnapsackProblem.Algorithms
             List<Item> items = problem.Items.ToList();
             items.Sort((item, item1) => item.ItemId - item1.ItemId);
             //       Price,         ItemId, Weight
-            Dictionary<int, Dictionary<int, int>> decompositionTable = new Dictionary<int, Dictionary<int, int>>
-                {
-                    //W(0,0) = 0
-                    {0, new Dictionary<int, int>{{-1, 0}}}
-                };
+            DecompositionTable decompositionTable = new DecompositionTable
+                    {
+                        //W(0,0) = 0
+                        {0, new Dictionary<int, int>{{-1, 0}}}
+                    };
 
-            foreach (Item item in items)
+            int maxCost = items.Sum(item => item.Cost);
+
+            while (true)
             {
-                int itemId = item.ItemId;
-                int itemCost = item.Cost;
-
-                List<int> costs = decompositionTable.Keys.ToList();
-
-                foreach (int cost in costs)
-                {
-                    Dictionary<int, int> tableRow = decompositionTable[cost];
-                    
-                    //NOT IN THE BAG
-                    tableRow.Add(itemId, tableRow[itemId - 1]);
-                    
-                    //IN THE BAG
-                    int weight = tableRow[itemId];
-                    int newCost = cost + itemCost;
-                    int newWeight = weight + item.Weight;
-
-                    if (!decompositionTable.ContainsKey(newCost))
-                    {
-                        decompositionTable.Add(newCost, new Dictionary<int, int>());
-                    }
-                    Dictionary<int, int> row = decompositionTable[newCost];
-                    if (row.ContainsKey(itemId))
-                    {
-                        row[itemId] = Math.Min(newWeight, row[itemId]);
-                    }
-                    else
-                    {
-                        row.Add(itemId, newWeight);
-                    }
-                }
-            }
-
-            List<int> costsReverse = decompositionTable.Keys.ToList();
-            costsReverse.Sort((i, i1) => i1 - i);
-            int lastItemId = items.Last().ItemId;
-
-            foreach (int cost in costsReverse)
-            {
-                int weight = decompositionTable[cost][lastItemId];
+                int weight = GetValueFromDecompositionTable(decompositionTable, items, items.Count - 1, maxCost);
                 if (weight <= problem.BagCapacity)
                 {
-                    return cost;
+                    return maxCost;
                 }
+                maxCost--;
+            }
+        }
+
+        public int GetValueFromDecompositionTable(DecompositionTable table, List<Item> items, int itemIndex, int cost)
+        {
+            if (itemIndex == -1)
+            {
+                if (cost > 0)
+                {
+                    return int.MaxValue - items.Max(item => item.Weight);
+                }
+                return 0;
             }
 
-            return 0;
+            Item actItem = items[itemIndex];
+
+            if (table.ContainsKey(cost))
+            {
+                if (table[cost].ContainsKey(itemIndex))
+                {
+                    return table[cost][itemIndex];
+                }
+            }
+            else
+            {
+                table.Add(cost, new Dictionary<int, int>());
+            }
+
+            int firstCandidate = GetValueFromDecompositionTable(table, items, itemIndex - 1, cost);
+            int secondCandidate = GetValueFromDecompositionTable(table, items, itemIndex - 1, cost - actItem.Cost) + actItem.Weight;
+
+            int min = Math.Min(firstCandidate, secondCandidate);
+
+            table[cost].Add(itemIndex, min);
+
+            return min;
         }
     }
 }
