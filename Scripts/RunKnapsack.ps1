@@ -1,5 +1,5 @@
-$AppPath = "C:\Users\jantk_000\Documents\GitHub\MI-PAA\KnapsackProblem\bin\Debug\"
-$DataPath = "C:\Users\jantk_000\Documents\GitHub\MI-PAA\Data\KnapsackProblem\"
+$AppPath = "..\KnapsackProblem\bin\Debug\"
+$DataPath = "..\Data\KnapsackProblem\"
 
 & $AppPath"KnapsackProblem.exe" -p 	$DataPath"knap_4.inst.dat" `
 									$DataPath"knap_10.inst.dat" `
@@ -9,4 +9,4 @@ $DataPath = "C:\Users\jantk_000\Documents\GitHub\MI-PAA\Data\KnapsackProblem\"
 									$DataPath"knap_10.sol.dat"  `
 									$DataPath"knap_15.sol.dat"  `
 									$DataPath"knap_20.sol.dat"  `
-								-a -b -v
+								-a -b -c -v

@@ -49,7 +49,7 @@ namespace KnapsackProblem.Tests
 
             //Assert.AreEqual(473, solve);
         }
-
+        
 
         [Test]
         public void Solve_ShouldReturnCorrectValue_IfAllItemsShouldBeInBag()
@@ -65,9 +65,14 @@ namespace KnapsackProblem.Tests
             Assert.AreEqual(563, solve);
 
             IKnapsackSolver solver2 = new BruteForceSolver();
-            int solve2 = solver.Solve(problem);
+            int solve2 = solver2.Solve(problem);
 
             Assert.AreEqual(563, solve2);
+
+            IKnapsackSolver solver3 = new BranchAndBoundSolver();
+            int solve3 = solver3.Solve(problem);
+
+            Assert.AreEqual(563, solve3);
         }
     }
 }

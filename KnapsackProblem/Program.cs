@@ -24,6 +24,7 @@ namespace KnapsackProblem
                 Dictionary<int, int> knownResults = null;
                 Dictionary<int, Tuple<int, long>> bruteForceResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> costToRatioHeuristicsResults = new Dictionary<int, Tuple<int, long>>();
+                Dictionary<int, Tuple<int, long>> branchAndBoundResults = new Dictionary<int, Tuple<int, long>>();
 
                 if (options.ResultFiles != null)
                 {
@@ -34,6 +35,7 @@ namespace KnapsackProblem
 
                 IKnapsackSolver bruteForceSolver = new BruteForceSolver();
                 IKnapsackSolver ratioHeuristicSolver = new RatioHeuristicSolver();
+                IKnapsackSolver branchAndBoundSolver = new BranchAndBoundSolver();
 
                 VerboseLog("Solving JIT instance");
                 KnapsackProblemModel JITProblem = new KnapsackProblemModel(9000, 100, new List<Item>
@@ -43,6 +45,7 @@ namespace KnapsackProblem
 
                 bruteForceSolver.Solve(JITProblem);
                 ratioHeuristicSolver.Solve(JITProblem);
+                branchAndBoundSolver.Solve(JITProblem);
 
                 VerboseLog("Calculation started");
 
@@ -73,6 +76,23 @@ namespace KnapsackProblem
                         if (knownResult != -1 && result != knownResult)
                         {
                             Console.WriteLine("ERROR - Brute force algorithm not accurate for problem " + problem);
+                            Environment.Exit(1);
+                        }
+                    }
+
+                    if (options.BranchAndBound)
+                    {
+                        VerboseLog("Branch and bound solver ...");
+
+                        stopwatch.Restart();
+                        int result = branchAndBoundSolver.Solve(problem);
+                        stopwatch.Stop();
+
+                        branchAndBoundResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
+
+                        if (knownResult != -1 && result != knownResult)
+                        {
+                            Console.WriteLine("ERROR - Branch and bound algorithm not accurate for problem " + problem);
                             Environment.Exit(1);
                         }
                     }

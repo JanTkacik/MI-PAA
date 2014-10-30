@@ -37,13 +37,14 @@ namespace KnapsackProblem.Algorithms
                     {
                         bestItemsCost = itemsCost;
                     }
-                }
-                recList = new List<Item>(items);
-                recList.Remove(items[0]);
-                sum = recList.Sum(item => item.Cost) + bag.ItemsCost();
-                if (sum >= bestItemsCost)
-                {
-                    bestItemsCost = RecursiveSolver(bag, recList, bestItemsCost);
+
+                    recList = new List<Item>(items);
+                    recList.Remove(items[0]);
+                    sum = recList.Sum(item => item.Cost) + bag.ItemsCost();
+                    if (sum >= bestItemsCost)
+                    {
+                        bestItemsCost = RecursiveSolver(bag, recList, bestItemsCost);
+                    }
                 }
                 bag.RemoveItem(items[0]);
                 return bestItemsCost;

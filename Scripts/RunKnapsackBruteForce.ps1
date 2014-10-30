@@ -1,5 +1,5 @@
-$AppPath = "C:\Users\jantk_000\Documents\GitHub\MI-PAA\KnapsackProblem\bin\Debug\"
-$DataPath = "C:\Users\jantk_000\Documents\GitHub\MI-PAA\Data\KnapsackProblem\"
+$AppPath = "..\KnapsackProblem\bin\Debug\"
+$DataPath = "..\Data\KnapsackProblem\"
 
 & $AppPath"KnapsackProblem.exe" -p 	$DataPath"knap_22.inst.dat" `
 									$DataPath"knap_25.inst.dat" `

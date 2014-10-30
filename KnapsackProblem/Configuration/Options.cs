@@ -23,6 +23,9 @@ namespace KnapsackProblem.Configuration
         [Option('b', "ratioheuristic", HelpText = "Runs cost to weight ratio heuristics", DefaultValue = false, Required = false)]
         public bool CostToRatioHeuristics { get; set; }
 
+        [Option('c', "branchandbound", HelpText = "Runs branch and bound optimized brute force algorithm", DefaultValue = false, Required = false)]
+        public bool BranchAndBound { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {
@@ -32,7 +35,7 @@ namespace KnapsackProblem.Configuration
                 Copyright = new CopyrightInfo("<<Jan Tkacik>>", 2014),
                 AddDashesToOption = true
             };
-            help.AddPreOptionsLine("Usage: -p problem.dat problem2.dat -r result.dat result2.dat -a -b");
+            help.AddPreOptionsLine("Usage: -p problem.dat problem2.dat -r result.dat result2.dat -a -b -c");
             help.AddOptions(this);
             return help;
         }
