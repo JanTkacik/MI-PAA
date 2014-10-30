@@ -14,6 +14,7 @@ namespace KnapsackProblem.Algorithms
             //       Price,         ItemId, Weight
             Dictionary<int, Dictionary<int, int>> decompositionTable = new Dictionary<int, Dictionary<int, int>>
                 {
+                    //W(0,0) = 0
                     {0, new Dictionary<int, int>{{-1, 0}}}
                 };
 
