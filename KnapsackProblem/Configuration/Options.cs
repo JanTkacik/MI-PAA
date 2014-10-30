@@ -29,6 +29,13 @@ namespace KnapsackProblem.Configuration
         [Option('d', "dynamicbycost", HelpText = "Runs dynamic programming technique with cost decomposition", DefaultValue = false, Required = false)]
         public bool DynamicByCost { get; set; }
 
+        [Option('e', "fptas", HelpText = "Runs dynamic programming technique with FPTAS", DefaultValue = false, Required = false)]
+        public bool FPTAS { get; set; }
+
+        [Option('s', "accuracy", HelpText = "FPTAS Accuracy", DefaultValue = 1, Required = false)]
+        public int FPTASAccuracy { get; set; }
+
+
         [HelpOption]
         public string GetUsage()
         {

@@ -26,7 +26,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(473, solve2);
 
-            IKnapsackSolver solver3 = new DynamicByCost();
+            IKnapsackSolver solver3 = new DynamicByCostSolver();
             int solve3 = solver3.Solve(problem);
 
             Assert.AreEqual(473, solve3);
@@ -50,7 +50,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(359, solve2);
 
-            IKnapsackSolver solver3 = new DynamicByCost();
+            IKnapsackSolver solver3 = new DynamicByCostSolver();
             int solve3 = solver3.Solve(problem);
 
             Assert.AreEqual(359, solve3);
@@ -83,7 +83,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(798, solve2);
 
-            IKnapsackSolver solver3 = new DynamicByCost();
+            IKnapsackSolver solver3 = new DynamicByCostSolver();
             int solve3 = solver3.Solve(problem);
 
             Assert.AreEqual(798, solve3);
@@ -108,7 +108,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(431, solve2);
 
-            IKnapsackSolver solver3 = new DynamicByCost();
+            IKnapsackSolver solver3 = new DynamicByCostSolver();
             int solve3 = solver3.Solve(problem);
 
             Assert.AreEqual(431, solve3);
@@ -132,7 +132,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(325, solve2);
 
-            IKnapsackSolver solver3 = new DynamicByCost();
+            IKnapsackSolver solver3 = new DynamicByCostSolver();
             int solve3 = solver3.Solve(problem);
 
             Assert.AreEqual(325, solve3);
@@ -176,7 +176,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(563, solve3);
 
-            IKnapsackSolver solver4 = new DynamicByCost();
+            IKnapsackSolver solver4 = new DynamicByCostSolver();
             int solve4 = solver4.Solve(problem);
 
             Assert.AreEqual(563, solve4);

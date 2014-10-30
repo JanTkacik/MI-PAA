@@ -11,25 +11,26 @@ namespace KnapsackProblem
 {
     class Program
     {
-        private static readonly Options options = new Options();
+        private static readonly Options Options = new Options();
 
         static void Main(string[] args)
         {
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
+            if (CommandLine.Parser.Default.ParseArguments(args, Options))
             {
                 VerboseLog("Data parsing ...");
 
                 DataParser parser = new DataParser();
-                List<KnapsackProblemModel> knapsackProblemModels = parser.ParseProblem(options.InputFiles);
+                List<KnapsackProblemModel> knapsackProblemModels = parser.ParseProblem(Options.InputFiles);
                 Dictionary<int, int> knownResults = null;
                 Dictionary<int, Tuple<int, long>> bruteForceResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> costToRatioHeuristicsResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> branchAndBoundResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> dynamicByCostResults = new Dictionary<int, Tuple<int, long>>();
+                Dictionary<int, Tuple<int, long>> fptasResults = new Dictionary<int, Tuple<int, long>>();
 
-                if (options.ResultFiles != null)
+                if (Options.ResultFiles != null)
                 {
-                    knownResults = parser.ParseResults(options.ResultFiles);
+                    knownResults = parser.ParseResults(Options.ResultFiles);
                 }
 
                 VerboseLog("Done.");
@@ -37,18 +38,30 @@ namespace KnapsackProblem
                 IKnapsackSolver bruteForceSolver = new BruteForceSolver();
                 IKnapsackSolver ratioHeuristicSolver = new RatioHeuristicSolver();
                 IKnapsackSolver branchAndBoundSolver = new BranchAndBoundSolver();
-                IKnapsackSolver dynamicByCost = new DynamicByCost();
+                IKnapsackSolver dynamicByCostSolve = new DynamicByCostSolver();
+                IKnapsackSolver fptasSolver = null;
+
+                if (Options.FPTAS)
+                {
+                    fptasSolver = new FPTASSolver(Options.FPTASAccuracy);
+                }
+
 
                 VerboseLog("Solving JIT instance");
-                KnapsackProblemModel JITProblem = new KnapsackProblemModel(9000, 100, new List<Item>
+                KnapsackProblemModel jitProblem = new KnapsackProblemModel(9000, 100, new List<Item>
                 {
                     new Item(18, 114, 0), new Item(42, 136, 1), new Item(88, 192, 2), new Item(3, 223, 3)
                 });
 
-                bruteForceSolver.Solve(JITProblem);
-                ratioHeuristicSolver.Solve(JITProblem);
-                branchAndBoundSolver.Solve(JITProblem);
-                dynamicByCost.Solve(JITProblem);
+                bruteForceSolver.Solve(jitProblem);
+                ratioHeuristicSolver.Solve(jitProblem);
+                branchAndBoundSolver.Solve(jitProblem);
+                dynamicByCostSolve.Solve(jitProblem);
+
+                if (fptasSolver != null)
+                {
+                    fptasSolver.Solve(jitProblem);
+                }
 
                 VerboseLog("Calculation started");
 
@@ -66,7 +79,7 @@ namespace KnapsackProblem
                         VerboseLog("Result should be: " + knownResult);
                     }
 
-                    if (options.BruteForce)
+                    if (Options.BruteForce)
                     {
                         VerboseLog("Brute force solver ...");
 
@@ -83,7 +96,7 @@ namespace KnapsackProblem
                         }
                     }
 
-                    if (options.BranchAndBound)
+                    if (Options.BranchAndBound)
                     {
                         VerboseLog("Branch and bound solver ...");
 
@@ -100,12 +113,12 @@ namespace KnapsackProblem
                         }
                     }
 
-                    if (options.DynamicByCost)
+                    if (Options.DynamicByCost)
                     {
                         VerboseLog("Dynamic by cost solver ...");
 
                         stopwatch.Restart();
-                        int result = dynamicByCost.Solve(problem);
+                        int result = dynamicByCostSolve.Solve(problem);
                         stopwatch.Stop();
 
                         dynamicByCostResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
@@ -117,7 +130,7 @@ namespace KnapsackProblem
                         }
                     }
 
-                    if (options.CostToRatioHeuristics)
+                    if (Options.CostToRatioHeuristics)
                     {
                         VerboseLog("Ratio heuristics solver ...");
 
@@ -128,19 +141,26 @@ namespace KnapsackProblem
                         costToRatioHeuristicsResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
                     }
 
+                    if (Options.FPTAS)
+                    {
+                        VerboseLog("FPTAS solver ...");
+                        
+                        if (fptasSolver != null)
+                        {
+                            stopwatch.Restart();
+                            int result = fptasSolver.Solve(problem);
+                            stopwatch.Stop();
+
+                            fptasResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
+                        }
+                    }
+
                     VerboseLog("Problem solved.");
                 }
 
                 TextWriter reportWriter;
 
-                if (options.OutputFilePath == null)
-                {
-                    reportWriter = Console.Out;
-                }
-                else
-                {
-                    reportWriter = new StreamWriter(options.OutputFilePath);
-                }
+                reportWriter = Options.OutputFilePath == null ? Console.Out : new StreamWriter(Options.OutputFilePath);
                 
                 decimal frequency = Stopwatch.Frequency;
 
@@ -149,7 +169,7 @@ namespace KnapsackProblem
                 {
                     reportWriter.Write(";Known result");
                 }
-                if (options.BruteForce)
+                if (Options.BruteForce)
                 {
                     reportWriter.Write(";Brute force result;Time [s]");
                     if (knownResults != null)
@@ -157,9 +177,33 @@ namespace KnapsackProblem
                         reportWriter.Write(";Relative error");
                     }
                 }
-                if (options.CostToRatioHeuristics)
+                if (Options.CostToRatioHeuristics)
                 {
                     reportWriter.Write(";Cost to weight ration heuristics result;Time [s]");
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";Relative error");
+                    }
+                }
+                if (Options.BranchAndBound)
+                {
+                    reportWriter.Write(";Branch and bound result;Time [s]");
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";Relative error");
+                    }
+                }
+                if (Options.DynamicByCost)
+                {
+                    reportWriter.Write(";Dynamic programming by cost result;Time [s]");
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";Relative error");
+                    }
+                }
+                if (Options.FPTAS)
+                {
+                    reportWriter.Write(";FPTAS result;Time [s]");
                     if (knownResults != null)
                     {
                         reportWriter.Write(";Relative error");
@@ -176,7 +220,7 @@ namespace KnapsackProblem
                     {
                         reportWriter.Write(";" + knownResults[problemId]);
                     }
-                    if (options.BruteForce)
+                    if (Options.BruteForce)
                     {
                         Tuple<int, long> bruteForceResult = bruteForceResults[problemId];
                         reportWriter.Write(";" + bruteForceResult.Item1 + ";" + bruteForceResult.Item2 / frequency);
@@ -185,9 +229,36 @@ namespace KnapsackProblem
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], bruteForceResult.Item1));
                         }
                     }
-                    if (options.CostToRatioHeuristics)
+                    if (Options.CostToRatioHeuristics)
                     {
                         Tuple<int, long> heuristicsResult = costToRatioHeuristicsResults[problemId];
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2 / frequency);
+                        if (knownResults != null)
+                        {
+                            reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
+                        }
+                    }
+                    if (Options.BranchAndBound)
+                    {
+                        Tuple<int, long> heuristicsResult = branchAndBoundResults[problemId];
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2 / frequency);
+                        if (knownResults != null)
+                        {
+                            reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
+                        }
+                    }
+                    if (Options.DynamicByCost)
+                    {
+                        Tuple<int, long> heuristicsResult = dynamicByCostResults[problemId];
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2 / frequency);
+                        if (knownResults != null)
+                        {
+                            reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
+                        }
+                    }
+                    if (Options.FPTAS)
+                    {
+                        Tuple<int, long> heuristicsResult = fptasResults[problemId];
                         reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2 / frequency);
                         if (knownResults != null)
                         {
@@ -213,7 +284,7 @@ namespace KnapsackProblem
 
         private static void VerboseLog(object data)
         {
-            if (options.Verbose)
+            if (Options.Verbose)
             {
                 Console.WriteLine(data.ToString());
             }

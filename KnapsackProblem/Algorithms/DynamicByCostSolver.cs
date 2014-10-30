@@ -7,7 +7,7 @@ using DecompositionTable = System.Collections.Generic.Dictionary<int, System.Col
 
 namespace KnapsackProblem.Algorithms
 {
-    class DynamicByCost : IKnapsackSolver
+    class DynamicByCostSolver : IKnapsackSolver
     {
         public int Solve(KnapsackProblemModel problem)
         {
