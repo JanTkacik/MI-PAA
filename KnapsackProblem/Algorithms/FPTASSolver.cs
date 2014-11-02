@@ -81,5 +81,13 @@ namespace KnapsackProblem.Algorithms
 
             return min;
         }
+
+        public double GetMaximumError(KnapsackProblemModel problem)
+        {
+            var n = problem.Items.Count;
+            var cMax = problem.Items.Sum(item => item.Cost);
+
+            return (n * Math.Pow(2, _bitesShift))/cMax;
+        }
     }
 }

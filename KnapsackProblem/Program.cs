@@ -158,9 +158,7 @@ namespace KnapsackProblem
                     VerboseLog("Problem solved.");
                 }
 
-                TextWriter reportWriter;
-
-                reportWriter = Options.OutputFilePath == null ? Console.Out : new StreamWriter(Options.OutputFilePath);
+                TextWriter reportWriter = Options.OutputFilePath == null ? Console.Out : new StreamWriter(Options.OutputFilePath);
                 
                 decimal frequency = Stopwatch.Frequency;
 
@@ -206,7 +204,7 @@ namespace KnapsackProblem
                     reportWriter.Write(";FPTAS result;Time [s]");
                     if (knownResults != null)
                     {
-                        reportWriter.Write(";Relative error");
+                        reportWriter.Write(";Relative error;Max possible error");
                     }
                 }
                 reportWriter.WriteLine();
@@ -263,6 +261,7 @@ namespace KnapsackProblem
                         if (knownResults != null)
                         {
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
+                            reportWriter.Write(";" + ((FPTASSolver)fptasSolver).GetMaximumError(problem));
                         }
                     }
                     reportWriter.WriteLine();
