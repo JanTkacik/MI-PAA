@@ -85,8 +85,7 @@ namespace KnapsackProblem.Algorithms
         public double GetMaximumError(KnapsackProblemModel problem)
         {
             var n = problem.Items.Count;
-            //var cMax = problem.Items.Sum(item => item.Cost);
-            var cMax = problem.Items.Max(item => item.Cost);
+            var cMax = problem.Items.Sum(item => item.Cost);
 
             return (n * Math.Pow(2, _bitesShift))/cMax;
         }
