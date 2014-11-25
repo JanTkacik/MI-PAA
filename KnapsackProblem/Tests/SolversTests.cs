@@ -26,7 +26,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(473, solve2);
 
-            IKnapsackSolver solver3 = new DynamicByCostSolver();
+            IKnapsackSolver solver3 = new FPTASSolver(1);
             int solve3 = solver3.Solve(problem);
 
             Assert.AreEqual(473, solve3);

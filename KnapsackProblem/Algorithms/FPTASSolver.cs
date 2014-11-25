@@ -41,6 +41,7 @@ namespace KnapsackProblem.Algorithms
                 int weight = GetValueFromDecompositionTable(decompositionTable, itemsShifted, itemsShifted.Count - 1, maxCost);
                 if (weight <= problem.BagCapacity)
                 {
+                    //TODO real value
                     return maxCost << _bitesShift;
                 }
                 maxCost--;
@@ -84,8 +85,7 @@ namespace KnapsackProblem.Algorithms
 
         public double GetMaximumError(KnapsackProblemModel problem)
         {
-            var n = problem.Items.Count;
-            //var cMax = problem.Items.Sum(item => item.Cost);
+            var n = problem.Items.Count;            
             var cMax = problem.Items.Max(item => item.Cost);
 
             return (n * Math.Pow(2, _bitesShift))/cMax;
