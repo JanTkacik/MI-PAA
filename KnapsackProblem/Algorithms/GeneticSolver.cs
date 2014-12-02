@@ -14,15 +14,17 @@ namespace KnapsackProblem.Algorithms
         private readonly ISelectionMethod _selectionMethod;
         private readonly double _mutationRate;
         private readonly double _crossoverRate;
+        private readonly double _randomSelectionPortion;
         private readonly bool _logging;
 
-        public GeneticSolver(int populationSize, int iterationsCount, ISelectionMethod selectionMethod, double mutationRate, double crossoverRate, bool logging)
+        public GeneticSolver(int populationSize, int iterationsCount, ISelectionMethod selectionMethod, double mutationRate, double crossoverRate, double randomSelectionPortion, bool logging)
         {
             _populationSize = populationSize;
             _iterationsCount = iterationsCount;
             _selectionMethod = selectionMethod;
             _mutationRate = mutationRate;
             _crossoverRate = crossoverRate;
+            _randomSelectionPortion = randomSelectionPortion;
             _logging = logging;
         }
 
@@ -34,7 +36,7 @@ namespace KnapsackProblem.Algorithms
                 new KnapsackFitnessFunction(
                     new Bag(problem.BagCapacity), 
                     problem.Items.ToList()), 
-                _selectionMethod) {MutationRate = _mutationRate, CrossoverRate = _crossoverRate};
+                _selectionMethod) {MutationRate = _mutationRate, CrossoverRate = _crossoverRate, RandomSelectionPortion = _randomSelectionPortion, AutoShuffling = true};
 
             StreamWriter log = null;
             if (_logging)
@@ -51,8 +53,9 @@ namespace KnapsackProblem.Algorithms
                 log.WriteLine("Population size," + _populationSize);
                 log.WriteLine("Crossover rate," + _crossoverRate);
                 log.WriteLine("Mutation rate," + _mutationRate);
+                log.WriteLine("Random selection portion," + _randomSelectionPortion);
                 log.WriteLine("Selection method," + _selectionMethod);
-                log.Write("Iteration,FitnessMax,FitnessAvg");
+                log.WriteLine("Iteration,FitnessMax,FitnessAvg");
             }
 
             for (int i = 0; i < _iterationsCount; i++)
@@ -62,6 +65,11 @@ namespace KnapsackProblem.Algorithms
                 {
                     log.WriteLine(i + "," + population.FitnessMax + "," + population.FitnessAvg);
                 }
+            }
+
+            if (log != null)
+            {
+                log.Close();
             }
 
             return Convert.ToInt32(population.FitnessMax);

@@ -50,7 +50,7 @@ namespace KnapsackProblem
                 }
                 if (Options.Genetics)
                 {
-                    ISelectionMethod selectionMethod;
+                    ISelectionMethod selectionMethod = null;
                     switch (Options.SelectionMethod)
                     {
                         case "roulette": selectionMethod = new RouletteWheelSelection();
@@ -59,16 +59,21 @@ namespace KnapsackProblem
                             break;
                         case "elitary" : selectionMethod = new EliteSelection();
                             break;
-                        default: selectionMethod = new RouletteWheelSelection();
+                        default: Console.WriteLine("Wrong selection method for genetics");
                             break;
                     }
 
-                    geneticSolver = new GeneticSolver(Options.PopulationSize, Options.IterationsCount,selectionMethod, Options.MutationRate, Options.CrossoverRate, true);
+                    if (selectionMethod == null)
+                    {
+                        return;
+                    }
+
+                    geneticSolver = new GeneticSolver(Options.PopulationSize, Options.IterationsCount,selectionMethod, Options.MutationRate, Options.CrossoverRate, Options.RandomSelectionPortion, true);
                 }
 
 
                 VerboseLog("Solving JIT instance");
-                KnapsackProblemModel jitProblem = new KnapsackProblemModel(9000, 100, new List<Item>
+                KnapsackProblemModel jitProblem = new KnapsackProblemModel(-1, 100, new List<Item>
                 {
                     new Item(18, 114, 0), new Item(42, 136, 1), new Item(88, 192, 2), new Item(3, 223, 3)
                 });
@@ -321,6 +326,28 @@ namespace KnapsackProblem
                         }
                     }
                     reportWriter.WriteLine();
+                }
+
+                if (Options.Genetics)
+                {
+                    decimal totalTime = 0;
+                    decimal totalError = 0;
+
+                    foreach (KnapsackProblemModel problem in knapsackProblemModels)
+                    {
+                        int problemId = problem.ProblemId;
+                        Tuple<int, long> result = geneticResults[problemId];
+                        totalTime += (result.Item2/frequency);
+                        totalError += CalculateRelativeError(knownResults[problemId], result.Item1);
+                    }
+
+                    decimal averageError = totalError/knapsackProblemModels.Count;
+
+                    reportWriter.WriteLine("Aggregate results");
+                    reportWriter.WriteLine("Aggregate time");
+                    reportWriter.WriteLine(totalTime);
+                    reportWriter.WriteLine("Average error");
+                    reportWriter.WriteLine(averageError);
                 }
             }
             else

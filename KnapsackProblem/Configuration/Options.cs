@@ -53,6 +53,9 @@ namespace KnapsackProblem.Configuration
         [Option('t', "populationsize", HelpText = "Genetic population size", DefaultValue = 30, Required = false)]
         public int PopulationSize { get; set; }
 
+        [Option('w', "randomselectionportion", HelpText = "Genetic random selection portion", DefaultValue = 0, Required = false)]
+        public double RandomSelectionPortion { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {
