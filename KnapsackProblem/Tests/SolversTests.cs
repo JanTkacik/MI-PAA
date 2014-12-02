@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AForge.Genetic;
 using KnapsackProblem.Algorithms;
 using KnapsackProblem.Model;
 using NUnit.Framework;
@@ -25,11 +26,9 @@ namespace KnapsackProblem.Tests
             int solve2 = solver2.Solve(problem);
 
             Assert.AreEqual(473, solve2);
-
-            IKnapsackSolver solver3 = new FPTASSolver(1);
-            int solve3 = solver3.Solve(problem);
-
-            Assert.AreEqual(473, solve3);
+            
+            IKnapsackSolver solver4 = new GeneticSolver(100,100,new RouletteWheelSelection(), 0.01,0.8,false);
+            solver4.Solve(problem);
         }
 
         [Test]

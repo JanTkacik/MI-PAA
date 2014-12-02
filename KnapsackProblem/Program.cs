@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using AForge.Genetic;
 using KnapsackProblem.Algorithms;
 using KnapsackProblem.Configuration;
 using KnapsackProblem.Helpers;
@@ -27,6 +28,7 @@ namespace KnapsackProblem
                 Dictionary<int, Tuple<int, long>> branchAndBoundResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> dynamicByCostResults = new Dictionary<int, Tuple<int, long>>();
                 Dictionary<int, Tuple<int, long>> fptasResults = new Dictionary<int, Tuple<int, long>>();
+                Dictionary<int, Tuple<int, long>> geneticResults = new Dictionary<int, Tuple<int, long>>();
 
                 if (Options.ResultFiles != null)
                 {
@@ -40,10 +42,28 @@ namespace KnapsackProblem
                 IKnapsackSolver branchAndBoundSolver = new BranchAndBoundSolver();
                 IKnapsackSolver dynamicByCostSolve = new DynamicByCostSolver();
                 IKnapsackSolver fptasSolver = null;
+                IKnapsackSolver geneticSolver = null;
 
                 if (Options.FPTAS)
                 {
                     fptasSolver = new FPTASSolver(Options.FPTASAccuracy);
+                }
+                if (Options.Genetics)
+                {
+                    ISelectionMethod selectionMethod;
+                    switch (Options.SelectionMethod)
+                    {
+                        case "roulette": selectionMethod = new RouletteWheelSelection();
+                            break;
+                        case "rank" : selectionMethod = new RankSelection();
+                            break;
+                        case "elitary" : selectionMethod = new EliteSelection();
+                            break;
+                        default: selectionMethod = new RouletteWheelSelection();
+                            break;
+                    }
+
+                    geneticSolver = new GeneticSolver(Options.PopulationSize, Options.IterationsCount,selectionMethod, Options.MutationRate, Options.CrossoverRate, true);
                 }
 
 
@@ -61,6 +81,11 @@ namespace KnapsackProblem
                 if (fptasSolver != null)
                 {
                     fptasSolver.Solve(jitProblem);
+                }
+
+                if (geneticSolver != null)
+                {
+                    geneticSolver.Solve(jitProblem);
                 }
 
                 VerboseLog("Calculation started");
@@ -155,6 +180,20 @@ namespace KnapsackProblem
                         }
                     }
 
+                    if (Options.Genetics)
+                    {
+                        VerboseLog("Genetics solver ...");
+
+                        if (geneticSolver != null)
+                        {
+                            stopwatch.Restart();
+                            int result = geneticSolver.Solve(problem);
+                            stopwatch.Stop();
+
+                            geneticResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
+                        }
+                    }
+
                     VerboseLog("Problem solved.");
                 }
 
@@ -205,6 +244,14 @@ namespace KnapsackProblem
                     if (knownResults != null)
                     {
                         reportWriter.Write(";Relative error;Max possible error");
+                    }
+                }
+                if (Options.Genetics)
+                {
+                    reportWriter.Write(";Genetics result;Time [s]");
+                    if (knownResults != null)
+                    {
+                        reportWriter.Write(";Relative error");
                     }
                 }
                 reportWriter.WriteLine();
@@ -262,6 +309,15 @@ namespace KnapsackProblem
                         {
                             reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
                             reportWriter.Write(";" + ((FPTASSolver)fptasSolver).GetMaximumError(problem));
+                        }
+                    }
+                    if (Options.Genetics)
+                    {
+                        Tuple<int, long> heuristicsResult = geneticResults[problemId];
+                        reportWriter.Write(";" + heuristicsResult.Item1 + ";" + heuristicsResult.Item2 / frequency);
+                        if (knownResults != null)
+                        {
+                            reportWriter.Write(";" + CalculateRelativeError(knownResults[problemId], heuristicsResult.Item1));
                         }
                     }
                     reportWriter.WriteLine();

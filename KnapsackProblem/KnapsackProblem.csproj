@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge">
+      <HintPath>packages\AForge.2.2.5\lib\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Genetic">
+      <HintPath>packages\AForge.Genetic.2.2.5\lib\AForge.Genetic.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math">
+      <HintPath>packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
+    </Reference>
     <Reference Include="CommandLine">
       <HintPath>packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
@@ -52,6 +61,7 @@
     <Compile Include="Algorithms\BruteForceSolver.cs" />
     <Compile Include="Algorithms\DynamicByCostSolver.cs" />
     <Compile Include="Algorithms\FPTASSolver.cs" />
+    <Compile Include="Algorithms\GeneticSolver.cs" />
     <Compile Include="Algorithms\IKnapsackSolver.cs" />
     <Compile Include="Algorithms\RatioHeuristicSolver.cs" />
     <Compile Include="Configuration\Options.cs" />

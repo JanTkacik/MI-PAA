@@ -35,6 +35,23 @@ namespace KnapsackProblem.Configuration
         [Option('s', "accuracy", HelpText = "FPTAS Accuracy", DefaultValue = 1, Required = false)]
         public int FPTASAccuracy { get; set; }
 
+        [Option('g', "genetics", HelpText = "Run genetics algorithm", DefaultValue = false, Required = false)]
+        public bool Genetics { get; set; }
+
+        [Option('i', "iterationscount", HelpText = "Genetic iterations count", DefaultValue = 1000, Required = false)]
+        public int IterationsCount { get; set; }
+
+        [Option('m', "mutationrate", HelpText = "Genetic mutation rate", DefaultValue = 0.01, Required = false)]
+        public double MutationRate { get; set; }
+
+        [Option('n', "crossoverrate", HelpText = "Genetic crossover rate", DefaultValue = 0.8, Required = false)]
+        public double CrossoverRate { get; set; }
+
+        [Option('q', "selectionmethod", HelpText = "Genetic selection method (roulette, rank, elitary)", DefaultValue = "roulette", Required = false)]
+        public string SelectionMethod { get; set; }
+
+        [Option('t', "populationsize", HelpText = "Genetic population size", DefaultValue = 30, Required = false)]
+        public int PopulationSize { get; set; }
 
         [HelpOption]
         public string GetUsage()
