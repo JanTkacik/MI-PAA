@@ -56,6 +56,9 @@ namespace KnapsackProblem.Configuration
         [Option('w', "randomselectionportion", HelpText = "Genetic random selection portion", DefaultValue = 0, Required = false)]
         public double RandomSelectionPortion { get; set; }
 
+        [Option('z', "geneticsmetaoptimization", HelpText = "Genetic metaoptimization", DefaultValue = false, Required = false)]
+        public bool GeneticMetaoptimization { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {
