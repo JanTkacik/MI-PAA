@@ -50,6 +50,33 @@ namespace KnapsackProblem
                 }
                 if (Options.Genetics)
                 {
+                    if (Options.GeneticMetaoptimization)
+                    {
+                        //SELECTION METHOD
+                        for (int i = 0; i < 3; i++)
+                        {
+                            ISelectionMethod method = null;
+                            switch (i)
+                            {
+                                case 0: method = new RouletteWheelSelection();
+                                    break;
+                                case 1: method = new RankSelection();
+                                    break;
+                                case 2: method = new EliteSelection();
+                                    break;
+                                default: Console.WriteLine("Wrong selection method for genetics");
+                                    break;
+                            }
+
+                            //RANDOM SELECTION PORTION
+                            for (int j = 0; j < 100; j++)
+                            {
+                                double randomSelectionPortion = j*0.001;
+
+                            }
+                        }
+                    }
+
                     ISelectionMethod selectionMethod = null;
                     switch (Options.SelectionMethod)
                     {
