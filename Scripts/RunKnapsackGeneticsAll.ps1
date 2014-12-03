@@ -25,4 +25,4 @@ $DataPath = "..\Data\KnapsackProblem\"
 									$DataPath"knap_35.sol.dat"  `
 									$DataPath"knap_37.sol.dat"  `
 									$DataPath"knap_40.sol.dat"  `
-								-g -i 100 -m 0.01 -n 0.8 -q roulette -t 30 -w 0 -v
+								-g -i 30 -m 0.87 -n 0.22 -q elitary -t 100 -w 0.03 -v -y

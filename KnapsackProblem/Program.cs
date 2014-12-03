@@ -16,8 +16,13 @@ namespace KnapsackProblem
 
         static void Main(string[] args)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            decimal frequency = Stopwatch.Frequency;
+
             if (CommandLine.Parser.Default.ParseArguments(args, Options))
             {
+                TextWriter reportWriter = Options.OutputFilePath == null ? Console.Out : new StreamWriter(Options.OutputFilePath);
+
                 VerboseLog("Data parsing ...");
 
                 DataParser parser = new DataParser();
@@ -50,33 +55,6 @@ namespace KnapsackProblem
                 }
                 if (Options.Genetics)
                 {
-                    if (Options.GeneticMetaoptimization)
-                    {
-                        //SELECTION METHOD
-                        for (int i = 0; i < 3; i++)
-                        {
-                            ISelectionMethod method = null;
-                            switch (i)
-                            {
-                                case 0: method = new RouletteWheelSelection();
-                                    break;
-                                case 1: method = new RankSelection();
-                                    break;
-                                case 2: method = new EliteSelection();
-                                    break;
-                                default: Console.WriteLine("Wrong selection method for genetics");
-                                    break;
-                            }
-
-                            //RANDOM SELECTION PORTION
-                            for (int j = 0; j < 100; j++)
-                            {
-                                double randomSelectionPortion = j*0.001;
-
-                            }
-                        }
-                    }
-
                     ISelectionMethod selectionMethod = null;
                     switch (Options.SelectionMethod)
                     {
@@ -89,15 +67,68 @@ namespace KnapsackProblem
                         default: Console.WriteLine("Wrong selection method for genetics");
                             break;
                     }
-
+                    
                     if (selectionMethod == null)
                     {
                         return;
                     }
 
-                    geneticSolver = new GeneticSolver(Options.PopulationSize, Options.IterationsCount,selectionMethod, Options.MutationRate, Options.CrossoverRate, Options.RandomSelectionPortion, true);
-                }
 
+                    if (Options.GeneticMetaoptimization)
+                    {
+                        //Random selection portion
+                        for (int i = 0; i < 100; i++)
+                        {
+                            double randomSelectionPortion = (i*0.001) + 0;
+                            //Crossover rate
+                            for (int j = 0; j < 1; j++)
+                            {
+                                double crossoverRate = (j*0.03) + 0.22;
+                                //Mutation rate
+                                for (int k = 0; k < 1; k++)
+                                {
+                                    double mutationRate = (k*0.04) + 0.87;
+
+                                    geneticSolver = new GeneticSolver(Options.PopulationSize, Options.IterationsCount, selectionMethod, mutationRate, crossoverRate, randomSelectionPortion,false, false);
+                                    geneticResults.Clear();
+                                    foreach (KnapsackProblemModel problem in knapsackProblemModels)
+                                    {
+                                        int result = 0;
+                                        try
+                                        {
+                                            stopwatch.Restart();
+                                            result = geneticSolver.Solve(problem);
+                                            stopwatch.Stop();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            
+                                        }
+
+                                        geneticResults.Add(problem.ProblemId, new Tuple<int, long>(result, stopwatch.ElapsedTicks));
+                                    }
+
+                                    decimal totalTime = 0;
+                                    decimal totalError = 0;
+
+                                    foreach (KnapsackProblemModel problem in knapsackProblemModels)
+                                    {
+                                        int problemId = problem.ProblemId;
+                                        Tuple<int, long> result = geneticResults[problemId];
+                                        totalTime += (result.Item2 / frequency);
+                                        totalError += CalculateRelativeError(knownResults[problemId], result.Item1);
+                                    }
+
+                                    decimal averageError = totalError / knapsackProblemModels.Count;
+
+                                    reportWriter.WriteLine(randomSelectionPortion + "," + crossoverRate + "," + mutationRate + "," + totalTime + "," + averageError);
+                                }
+                            }
+                        }
+                    }
+                    
+                    geneticSolver = new GeneticSolver(Options.PopulationSize, Options.IterationsCount,selectionMethod, Options.MutationRate, Options.CrossoverRate, Options.RandomSelectionPortion, Options.DiversityCheck, true);
+                }
 
                 VerboseLog("Solving JIT instance");
                 KnapsackProblemModel jitProblem = new KnapsackProblemModel(-1, 100, new List<Item>
@@ -122,7 +153,7 @@ namespace KnapsackProblem
 
                 VerboseLog("Calculation started");
 
-                Stopwatch stopwatch = new Stopwatch();
+                
                 
                 foreach (KnapsackProblemModel problem in knapsackProblemModels)
                 {
@@ -228,11 +259,7 @@ namespace KnapsackProblem
 
                     VerboseLog("Problem solved.");
                 }
-
-                TextWriter reportWriter = Options.OutputFilePath == null ? Console.Out : new StreamWriter(Options.OutputFilePath);
                 
-                decimal frequency = Stopwatch.Frequency;
-
                 reportWriter.Write("Problem ID;Items count");
                 if (knownResults != null)
                 {

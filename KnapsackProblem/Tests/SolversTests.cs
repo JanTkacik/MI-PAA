@@ -27,7 +27,7 @@ namespace KnapsackProblem.Tests
 
             Assert.AreEqual(473, solve2);
             
-            IKnapsackSolver solver4 = new GeneticSolver(100,100,new RouletteWheelSelection(), 0.01,0.8,0,false);
+            IKnapsackSolver solver4 = new GeneticSolver(100,100,new RouletteWheelSelection(), 0.01,0.8,0,false,false);
             solver4.Solve(problem);
         }
 

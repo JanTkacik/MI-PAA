@@ -59,6 +59,9 @@ namespace KnapsackProblem.Configuration
         [Option('z', "geneticsmetaoptimization", HelpText = "Genetic metaoptimization", DefaultValue = false, Required = false)]
         public bool GeneticMetaoptimization { get; set; }
 
+        [Option('y', "geneticsdiversitycheck", HelpText = "Genetic diversity check", DefaultValue = false, Required = false)]
+        public bool DiversityCheck { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {

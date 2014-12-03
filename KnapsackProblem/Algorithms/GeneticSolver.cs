@@ -15,9 +15,10 @@ namespace KnapsackProblem.Algorithms
         private readonly double _mutationRate;
         private readonly double _crossoverRate;
         private readonly double _randomSelectionPortion;
+        private readonly bool _diversityCheck;
         private readonly bool _logging;
 
-        public GeneticSolver(int populationSize, int iterationsCount, ISelectionMethod selectionMethod, double mutationRate, double crossoverRate, double randomSelectionPortion, bool logging)
+        public GeneticSolver(int populationSize, int iterationsCount, ISelectionMethod selectionMethod, double mutationRate, double crossoverRate, double randomSelectionPortion, bool diversityCheck, bool logging)
         {
             _populationSize = populationSize;
             _iterationsCount = iterationsCount;
@@ -25,11 +26,14 @@ namespace KnapsackProblem.Algorithms
             _mutationRate = mutationRate;
             _crossoverRate = crossoverRate;
             _randomSelectionPortion = randomSelectionPortion;
+            _diversityCheck = diversityCheck;
             _logging = logging;
         }
 
         public int Solve(KnapsackProblemModel problem)
         {
+            double BestSolution = 0;
+            
             Population population = new Population(
                 _populationSize, 
                 new BinaryChromosome(problem.Items.Count), 
@@ -55,15 +59,29 @@ namespace KnapsackProblem.Algorithms
                 log.WriteLine("Mutation rate," + _mutationRate);
                 log.WriteLine("Random selection portion," + _randomSelectionPortion);
                 log.WriteLine("Selection method," + _selectionMethod);
+                log.WriteLine("Diversity check," + _diversityCheck);
                 log.WriteLine("Iteration,FitnessMax,FitnessAvg");
             }
 
             for (int i = 0; i < _iterationsCount; i++)
             {
                 population.RunEpoch();
+                if (population.FitnessMax > BestSolution)
+                {
+                    BestSolution = population.FitnessMax;
+                }
                 if (log != null)
                 {
                     log.WriteLine(i + "," + population.FitnessMax + "," + population.FitnessAvg);
+                }
+                if (_diversityCheck)
+                {
+                    if ((population.FitnessMax - population.FitnessAvg) < (population.FitnessMax*0.03))
+                    {
+                        IChromosome bestChromosome = population.BestChromosome;
+                        population.Regenerate();
+                        population.AddChromosome(bestChromosome);
+                    }
                 }
             }
 
@@ -72,12 +90,12 @@ namespace KnapsackProblem.Algorithms
                 log.Close();
             }
 
-            return Convert.ToInt32(population.FitnessMax);
+            return Convert.ToInt32(BestSolution);
         }
 
         private class KnapsackFitnessFunction : IFitnessFunction
         {
-            private static readonly ulong[] _testBitsMask = new ulong[]
+            private static readonly ulong[] TestBitsMask = new ulong[]
                 {
                     0x0000000000000001,
                     0x0000000000000002,
@@ -161,7 +179,7 @@ namespace KnapsackProblem.Algorithms
                 ulong value = knapsackConfiguration.Value;
                 for (int i = 0; i < length; i++)
                 {
-                    if ((value & _testBitsMask[i]) == 0)
+                    if ((value & TestBitsMask[i]) == 0)
                     {
                         _bag.RemoveItem(_items[i]);
                     }
