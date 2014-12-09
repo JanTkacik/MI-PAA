@@ -29,6 +29,9 @@ namespace KnapsackProblem.Tests
             
             IKnapsackSolver solver4 = new GeneticSolver(100,100,new RouletteWheelSelection(), 0.01,0.8,0,false,false);
             solver4.Solve(problem);
+
+            IKnapsackSolver solver5 = new FPTASSolver(0.9);
+            solver5.Solve(problem);
         }
 
         [Test]

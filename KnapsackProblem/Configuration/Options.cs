@@ -33,7 +33,7 @@ namespace KnapsackProblem.Configuration
         public bool FPTAS { get; set; }
 
         [Option('s', "accuracy", HelpText = "FPTAS Accuracy", DefaultValue = 1, Required = false)]
-        public int FPTASAccuracy { get; set; }
+        public double FPTASAccuracy { get; set; }
 
         [Option('g', "genetics", HelpText = "Run genetics algorithm", DefaultValue = false, Required = false)]
         public bool Genetics { get; set; }
