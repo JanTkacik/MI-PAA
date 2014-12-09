@@ -130,9 +130,10 @@ namespace KnapsackProblem.Algorithms
             int n = problem.Items.Count;
             int cMax = problem.Items.Max(item => item.Cost);
 
-            double bitesShift = Math.Log(((_precision*cMax)/n), 2);
+            double bitesShift = Math.Log((((1 - _precision) * cMax) / n), 2);
 
-            return (int)Math.Ceiling(bitesShift);
+            int floor = (int) Math.Floor(bitesShift);
+            return floor < 0 ? 0 : floor;
         }
     }
 }
