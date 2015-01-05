@@ -9,6 +9,11 @@ namespace W3SAT.Model
     {
         public int VariablesCount { get { return _variablesCount; } }
 
+        public int ID
+        {
+            get { return 0; }
+        }
+
         private readonly int _variablesCount;
         private readonly List<Clausule> _clausules;
 
