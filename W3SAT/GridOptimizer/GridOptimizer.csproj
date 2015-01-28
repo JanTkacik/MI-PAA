@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E0C437F7-C5CE-47C6-972F-4C80DE7A90A4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C620BFA5-0347-4D8C-8A62-A205AF614912}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>W3SAT</RootNamespace>
-    <AssemblyName>W3SAT</AssemblyName>
+    <RootNamespace>GridOptimizer</RootNamespace>
+    <AssemblyName>GridOptimizer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,15 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge">
-      <HintPath>..\packages\AForge.2.2.5\lib\AForge.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Genetic">
-      <HintPath>..\packages\AForge.Genetic.2.2.5\lib\AForge.Genetic.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Math">
-      <HintPath>..\packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,27 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InstanceGenerator\InstanceGenerator.cs" />
-    <Compile Include="Model\Clausule.cs" />
-    <Compile Include="Model\Formula.cs" />
-    <Compile Include="Model\WeightedVariable.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="GridOptimizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Solvers\BruteForceSolver.cs" />
-    <Compile Include="Solvers\GeneticsSolver.cs" />
-    <Compile Include="Solvers\Genetics\BitArrayChromosome.cs" />
-    <Compile Include="Solvers\Genetics\W3SATFitnessFunction.cs" />
-    <Compile Include="Solvers\IW3SATSolver.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GridOptimizer\GridOptimizer.csproj">
-      <Project>{C620BFA5-0347-4D8C-8A62-A205AF614912}</Project>
-      <Name>GridOptimizer</Name>
-    </ProjectReference>
+    <Compile Include="TestProblems\AckleyTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using GridOptimizer.TestProblems;
 using W3SAT.Model;
 using W3SAT.Solvers;
 
@@ -109,8 +110,13 @@ namespace W3SAT
             //Console.WriteLine(solve2.Item1);
             //Console.WriteLine(stopwatch2.ElapsedMilliseconds);
             
+            GridOptimizer.GridOptimizer optimizer = new GridOptimizer.GridOptimizer(3, 10);
+            AckleyProblem test = new AckleyProblem();
+            double[] optimum = optimizer.Optimize(test);
 
-
+            Console.WriteLine(optimum[0]);
+            Console.WriteLine(optimum[1]);
+            
             Console.ReadLine();
         }
     }
