@@ -25,6 +25,7 @@ namespace W3SAT.Model
 
         public Formula(string dimacsValue)
         {
+            _clausules = new List<Clausule>();
             string[] lines = dimacsValue.Split(new[]{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
             foreach (string line in lines)
             {
