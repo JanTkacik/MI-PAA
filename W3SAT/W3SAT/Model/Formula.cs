@@ -58,11 +58,27 @@ namespace W3SAT.Model
         public int GetWeight(BitArray variableValues)
         {
             int weight = 0;
-            foreach (var clausule in _clausules)
+            for (int i = 0; i < variableValues.Length; i++)
             {
-                weight += clausule.GetWeight(variableValues);
+                if (variableValues[i])
+                {
+                    weight += GetVariableWeight(i);
+                }
             }
+                
             return weight;
+        }
+
+        private int GetVariableWeight(int index)
+        {
+            foreach (Clausule clausule in _clausules)
+            {
+                if (clausule.IsUsingVariable(index))
+                {
+                    return clausule.GetVariableWeight(index);
+                }
+            }
+            return 0;
         }
 
         public bool IsSatisfiedSafe(BitArray variablesValues)

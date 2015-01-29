@@ -41,7 +41,9 @@
   <ItemGroup>
     <Compile Include="GridOptimizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestProblems\AckleyTest.cs" />
+    <Compile Include="TestProblems\AckleyProblem.cs" />
+    <Compile Include="TestProblems\BuckinFunction6Problem.cs" />
+    <Compile Include="TestProblems\McCornicProblem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

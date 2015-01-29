@@ -42,7 +42,10 @@ namespace GridOptimizer
             List<IOptimizationProblem> newProblems = new List<IOptimizationProblem>(_spaceCoverageIndex);
             for (int i = 0; i < _spaceCoverageIndex; i++)
             {
-                newProblems.Add(new SubOptimizationProblem(evaluations[i].Item2, problem));
+                if (i < evaluations.Count)
+                {
+                    newProblems.Add(new SubOptimizationProblem(evaluations[i].Item2, problem));
+                }
             }
 
             Tuple<double, Configuration> best = evaluations[0];
@@ -175,12 +178,24 @@ namespace GridOptimizer
             _setDimensions = new bool[dimensionsCount];
         }
 
+        public Configuration(double[] value) : this(value.Length)
+        {
+            Array.Copy(value, _value, DimensionsCount);
+            _setDimensions = new bool[DimensionsCount];
+            for (int i = 0; i < DimensionsCount; i++)
+            {
+                _setDimensions[i] = true;
+            }
+        }
+
         private Configuration(int dimensionsCount, double[] value, bool[] setDimensions)
             : this(dimensionsCount)
         {
             Array.Copy(value, _value, dimensionsCount);
             Array.Copy(setDimensions, _setDimensions, dimensionsCount);
         }
+
+        
 
         public bool IsDimensionSet(int dimension)
         {

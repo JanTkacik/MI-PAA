@@ -78,5 +78,27 @@ namespace W3SAT.Model
         {
             return string.Format("{0} {1} {2}", _variable1.ToString(_modifier1), _variable2.ToString(_modifier2), _variable3.ToString(_modifier3));
         }
+
+        public bool IsUsingVariable(int index)
+        {
+            return _variable1.Id == index || _variable2.Id == index || _variable3.Id == index;
+        }
+
+        public int GetVariableWeight(int index)
+        {
+            if (_variable1.Id == index)
+            {
+                return _variable1.Weight;
+            }
+            if (_variable2.Id == index)
+            {
+                return _variable2.Weight;
+            }
+            if (_variable3.Id == index)
+            {
+                return _variable3.Weight;
+            }
+            return 0;
+        }
     }
 }
