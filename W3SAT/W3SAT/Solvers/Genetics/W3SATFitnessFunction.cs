@@ -1,4 +1,5 @@
-﻿using AForge.Genetic;
+﻿using System;
+using AForge.Genetic;
 using W3SAT.Model;
 
 namespace W3SAT.Solvers.Genetics
@@ -18,10 +19,16 @@ namespace W3SAT.Solvers.Genetics
 
             if(_problem.IsSatisfiedSafe(bitArrayChromosome.Value))
             {
-                return _problem.GetWeightSafe(bitArrayChromosome.Value);
+                return _problem.GetWeightSafe(bitArrayChromosome.Value) + 100;
             }
 
-            return 0;
+            double percentageOfSatisfiedClausulesSafe = _problem.GetPercentageOfSatisfiedClausulesSafe(bitArrayChromosome.Value);
+            if (Math.Abs(percentageOfSatisfiedClausulesSafe - 0) < 0.001)
+            {
+                return 1;
+            }
+            
+            return percentageOfSatisfiedClausulesSafe;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using AForge.Genetic;
 using W3SAT.Model;
 using W3SAT.Solvers.Genetics;
+using Population = W3SAT.Solvers.Genetics.Population;
 
 namespace W3SAT.Solvers
 {
@@ -76,7 +77,7 @@ namespace W3SAT.Solvers
                 }
                 if (_diversityCheck)
                 {
-                    if ((population.FitnessMax - population.FitnessAvg) < (population.FitnessMax * 0.03))
+                    if ((population.FitnessMax - population.FitnessAvg) < (population.FitnessMax * 0.07))
                     {
                         IChromosome bestChromosome = population.BestChromosome;
                         population.Regenerate();
@@ -90,7 +91,11 @@ namespace W3SAT.Solvers
                 log.Close();
             }
 
-           return new Tuple<int, BitArray>(BestSolution, BestSolutionArray);
+            if (BestSolution > 100)
+            {
+                return new Tuple<int, BitArray>(BestSolution - 100, BestSolutionArray);
+            }
+            return new Tuple<int, BitArray>(0, BestSolutionArray);
         }
     }
 }

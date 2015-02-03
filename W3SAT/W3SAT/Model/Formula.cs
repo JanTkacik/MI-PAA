@@ -113,5 +113,24 @@ namespace W3SAT.Model
             }
             return dimacs.ToString();
         }
+
+        public double GetPercentageOfSatisfiedClausulesSafe(BitArray variableValues)
+        {
+            CheckVariableCount(variableValues);
+            return GetPercentageOfSatisfiedClausules(variableValues);
+        }
+
+        private double GetPercentageOfSatisfiedClausules(BitArray variableValues)
+        {
+            int satisfied = 0;
+            foreach (var clausule in _clausules)
+            {
+                if (clausule.IsSatisfied(variableValues))
+                {
+                    satisfied++;
+                }
+            }
+            return ((satisfied*100)/(double)_clausules.Count);
+        }
     }
 }

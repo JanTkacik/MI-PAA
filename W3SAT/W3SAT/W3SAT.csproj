@@ -60,6 +60,8 @@
     <Compile Include="Solvers\GeneticsSolver.cs" />
     <Compile Include="Solvers\Genetics\BitArrayChromosome.cs" />
     <Compile Include="Solvers\Genetics\GeneticsMetaOptimization.cs" />
+    <Compile Include="Solvers\Genetics\Population.cs" />
+    <Compile Include="Solvers\Genetics\RouletteWheelSelection.cs" />
     <Compile Include="Solvers\Genetics\W3SATFitnessFunction.cs" />
     <Compile Include="Solvers\IW3SATSolver.cs" />
   </ItemGroup>

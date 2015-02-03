@@ -36,6 +36,17 @@ namespace GridOptimizer
             {
                 evaluations.Add(new Tuple<double, Configuration>(problem.Evaluate(sample),sample));
             }
+            
+            //REEVALUATE FIRST x percent if evaluation function is unstable
+            for (int j = 1; j < 11; j++)
+            {
+                evaluations.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+                int maxIndex = evaluations.Count / (2*j);
+                for (int i = 0; i < maxIndex; i++)
+                {
+                    evaluations[i] = new Tuple<double, Configuration>((evaluations[i].Item1 + problem.Evaluate(evaluations[i].Item2))/2,evaluations[i].Item2);
+                }
+            }
 
             evaluations.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 

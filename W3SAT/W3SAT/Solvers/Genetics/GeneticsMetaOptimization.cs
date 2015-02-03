@@ -29,7 +29,7 @@ namespace W3SAT.Solvers.Genetics
 
         public double GetStepForDimension(int dimension)
         {
-            return 0.1;
+            return 0.25;
         }
 
         public double GetStepChangeForDimension(int dimension)
@@ -40,11 +40,11 @@ namespace W3SAT.Solvers.Genetics
         public double Evaluate(Configuration configuration)
         {
             GeneticsSolver geneticsSolver = new GeneticsSolver(
-                100, 100, new RouletteWheelSelection(), 
+                30, 100, new EliteSelection(), 
                 configuration.GetValueForDimension(0), 
                 configuration.GetValueForDimension(1), 
                 configuration.GetValueForDimension(2), 
-                false, true);
+                true, false);
 
             int sumOfSolutions = 0;
             foreach (Formula problem in _problems)
